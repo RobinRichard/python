@@ -1,0 +1,80 @@
+{% extends 'quiz/layout.html' %} {% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Game</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+{% csrf_token %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                List of Tounaments
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <table width="100%" class="table table-striped table-bordered table-hover quizdataTables" id="gametable">
+                    <thead>
+                        <tr>
+                            <th>Tournament Name</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>High Score</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<div class="modal fade" id="gameModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>-->
+                <h3 class="modal-title"><span class="label label-warning" id="qid">2</span> <span id="qes"> Question</span></h3>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="gameuser" value={{request.session.user_id}}>
+                <div class="col-xs-3 col-xs-offset-5">
+                    <div id="loadbar" style="display: none;">
+                        <div class="blockG" id="rotateG_01"></div>
+                        <div class="blockG" id="rotateG_02"></div>
+                        <div class="blockG" id="rotateG_03"></div>
+                        <div class="blockG" id="rotateG_04"></div>
+                        <div class="blockG" id="rotateG_05"></div>
+                        <div class="blockG" id="rotateG_06"></div>
+                        <div class="blockG" id="rotateG_07"></div>
+                        <div class="blockG" id="rotateG_08"></div>
+                    </div>
+                </div>
+                <div class="quiz" id="quiz" data-toggle="buttons">
+                    <label class="element-animation1 btn btn-lg btn-primary btn-block"><span class="btn-label"><i class="glyphicon glyphicon-chevron-right"></i></span> <input type="radio" name="q_answer" value="1">1 One</label>
+                    <label class="element-animation2 btn btn-lg btn-primary btn-block"><span class="btn-label"><i class="glyphicon glyphicon-chevron-right"></i></span> <input type="radio" name="q_answer" value="2">2 Two</label>
+                    <label class="element-animation3 btn btn-lg btn-primary btn-block"><span class="btn-label"><i class="glyphicon glyphicon-chevron-right"></i></span> <input type="radio" name="q_answer" value="3">3 Three</label>
+                    <label class="element-animation4 btn btn-lg btn-primary btn-block"><span class="btn-label"><i class="glyphicon glyphicon-chevron-right"></i></span> <input type="radio" name="q_answer" value="4">4 Four</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span class="pull-left" id="score"></span>
+                <span id="answer"></span>
+                <button type="button" class="btn btn-default" id="quiz_close" style="display:none">Close</button>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+{% endblock %} {% block script %} {% load static %}
+<!-- Tournament JavaScript -->
+<script type="text/javascript" src="{% static 'quiz/js/user.js' %}"></script>
+{% endblock %}

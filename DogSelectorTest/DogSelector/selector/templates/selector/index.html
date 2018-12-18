@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Selector</title>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'selector/css/bootstrap.min.css' %}"/>
+</head>
+<body>
+<div class="bg-primary p-2 text-center text-white">
+    <h3>Welcome to the IN710 Dog Selector</h3>
+    <p class="font-italic">We'll help you to choose the perfect dog</p>
+</div>
+
+<div class="row m-4">
+    <div class="col-lg-5">
+         <form method="POST" action="">
+             {% csrf_token %}
+             <div class="card">
+            <div class="card-header text-white bg-info">
+                Preference
+            </div>
+            <div class="card-body">
+                <h6>Must Be Good With Children : </h6>
+                {% if choiselist %}
+                <ul class="list-inline">
+                    {% for c in choiselist %}
+                    <li class="list-inline-item"><input type="radio" class="mr-2" name="GoodWithChildren"
+                                                        value="{{c.id}}">
+                        {{c.Choise}}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>No choise are available.</p>
+                {% endif %}
+
+                <h6>Drooling : </h6>
+                {% if choiselist %}
+                <ul class="list-inline">
+                    {% for c in choiselist %}
+                    <li class="list-inline-item"><input type="radio" class="mr-2" name="Drools" value="{{c.id}}">
+                        {{c.ChoiseDrool}}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>No Drooling are available.</p>
+                {% endif %}
+
+                <h6>Coat Length : </h6>
+                {% if lengthlist %}
+                <ul class="list-inline">
+                    {% for l in lengthlist %}
+                    <li class="list-inline-item"><input type="radio" class="mr-2" name="Coatlength" value="{{l.id}}">
+                        {{ l.Length }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>No Length are available.</p>
+                {% endif %}
+
+
+                <table  class="table">
+                    <tr>
+                        <th>Levels</th>
+                        <th>Low</th>
+                        <th>Medium</th>
+                        <th>High</th>
+                        <th>No Preference</th>
+                    </tr>
+
+                        {% if Avtivities %}
+                            {% for l in Avtivities %}
+                                <tr>
+                                    {% if l == "Activity" or l == "Shedding" or l == "Grooming" or l == "Intelligence" %}
+                                         <td>
+                                            {{l}} Levels
+                                         </td>
+                                        {% if levellist %}
+                                            {% for lv in levellist %}
+                                                <td><input type="radio" class="mr-2" name="{{l}}Level" value="{{lv.id}}"></td>
+                                            {% endfor %}
+                                            <td><input type="radio" class="mr-2" name="{{l}}Level" value=""></td>
+                                            {% else %}
+                                            <p>No level are available.</p>
+                                        {% endif %}
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                        <p>No Avtivities are available.</p>
+                        {% endif %}
+                </table>
+                <h6>Prefered Size : </h6>
+                {% if sizelist %}
+                <select class="form-control" name="Size">
+                    <option value="0">Select Size</option>
+                    {% for s in sizelist %}
+                    <option value="{{s.id}}">
+                        {{ s.Size }}
+                    </option>
+                    {% endfor %}
+                </select>
+                {% else %}
+                <p>No Size are available.</p>
+                {% endif %}
+                <br>
+                <button type="submit" class="btn btn-info">Find My Dog</button>
+                <a href=""><button type="button" class="btn btn-danger">Clear</button></a>
+            </div>
+        </div>
+         </form>
+    </div>
+    <div class="col-lg-7">
+        {% if SelectionList %}
+         <div class="card" style="height: 680px;overflow-y: scroll;">
+            <div class="card-header text-white bg-info">
+                Our Recommendation (Total Match : {{SelectionList|length}})
+            </div>
+            <div class="card-body">
+                    {% for breeds in SelectionList %}
+                <div class="card m-3">
+            <div class="card-header">
+                We Suggest You <b>{{ breeds.Breed_Type }}</b>
+            </div>
+            <div class="card-body">
+                    <table class="table ">
+                        <tr><th>Activity Level </th><td> {{breeds.Activity}}</td><th>Coat length </th><td> {{breeds.Coatlength}}</td></tr>
+                        <tr><th>Drools  </th><td> {{breeds.Drools}}</td><th>Good With Children </th><td> {{breeds.GoodWithChildren}}</td></tr>
+                        <tr><th>Grooming Level </th><td> {{breeds.Grooming}}</td><th>Intelligence </th><td> {{breeds.Intelligence}}</td></tr>
+                        <tr><th>Shedding Level </th><td> {{breeds.Shedding}}</td><th>Size </th><td> {{breeds.Size}}</td></tr>
+                        {% load static %}
+                        <tr><td colspan="4" class="text-center"><img src="{% static 'selector/images/DogImages/' %}{{breeds.DogImage}}" alt="My image" height="200px" width="400px"></td></tr>
+                    </table>
+            </div></div>
+                    {% endfor %}
+
+            </div>
+         </div>
+        {% else %}
+        {% if SuggestionList %}
+            <div class="card" style="height: 680px;overflow-y: scroll;">
+            <div class="card-header text-white bg-info">
+                No Match Fountd
+            </div>
+            <div class="card-body">
+                <p class="text-danger">You May Like Below Given Breeds</p>
+                    {% for breeds in SuggestionList %}
+                <div class="card m-3">
+            <div class="card-header">
+                We Suggest You <b>{{ breeds.Breed_Type }}</b>
+            </div>
+            <div class="card-body">
+                    <table class="table">
+                        <tr><th>Activity Level </th><td> {{breeds.Activity}}</td><th>Coat length </th><td> {{breeds.Coatlength}}</td></tr>
+                        <tr><th>Drools  </th><td> {{breeds.Drools}}</td><th>Good With Children </th><td> {{breeds.GoodWithChildren}}</td></tr>
+                        <tr><th>Grooming Level </th><td> {{breeds.Grooming}}</td><th>Intelligence </th><td> {{breeds.Intelligence}}</td></tr>
+                        <tr><th>Shedding Level </th><td> {{breeds.Shedding}}</td><th>Size </th><td> {{breeds.Size}}</td></tr>
+                        {% load static %}
+                        <tr><td colspan="4" class="text-center"><img src="{% static 'selector/images/DogImages/' %}{{breeds.DogImage}}" alt="My image" height="200px" width="400px"></td></tr>
+                    </table>
+            </div></div>
+                    {% endfor %}
+
+            </div>
+         </div>
+
+        {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+
+</body>
+</html>
